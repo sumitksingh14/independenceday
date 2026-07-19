@@ -29,13 +29,4 @@ export class NavbarComponent {
     this.audioService.playClickSound();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  toggleMusic() {
-    this.audioService.toggleAudio();
-  }
-
-  onVolumeChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.audioService.setVolume(parseFloat(input.value));
-  }
 }

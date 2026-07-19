@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NgxParticlesModule, NgParticlesService } from '@tsparticles/angular';
@@ -10,7 +11,7 @@ import { AudioService } from './core/services/audio.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, NgxParticlesModule],
+  imports: [RouterOutlet, CommonModule, NavbarComponent, FooterComponent, NgxParticlesModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -87,7 +88,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private readonly ngParticlesService: NgParticlesService,
-    private readonly audioService: AudioService
+    public readonly audioService: AudioService
   ) {}
 
   ngOnInit(): void {
@@ -126,5 +127,14 @@ export class AppComponent implements OnInit {
   private isInteractive(element: HTMLElement | null): boolean {
     if (!element) return false;
     return !!element.closest('a, button, input, select, textarea, [role="button"], [role="link"], .clickable, .music-toggle, .menu-toggle, .card, .glass-card');
+  }
+
+  toggleMusic() {
+    this.audioService.toggleAudio();
+  }
+
+  onVolumeChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.audioService.setVolume(parseFloat(input.value));
   }
 }
