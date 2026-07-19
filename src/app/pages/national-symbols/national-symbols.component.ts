@@ -1,6 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
-import { LanguageService } from '../../core/services/language.service';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-national-symbols',
@@ -9,15 +7,6 @@ import { Subscription } from 'rxjs';
   templateUrl: './national-symbols.component.html',
   styleUrl: './national-symbols.component.scss'
 })
-export class NationalSymbolsComponent implements OnDestroy {
-  t: any = {};
-  private sub: Subscription;
+export class NationalSymbolsComponent {
 
-  constructor(public langService: LanguageService) {
-    this.sub = this.langService.translations$.subscribe(t => this.t = t);
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
 }
