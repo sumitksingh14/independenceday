@@ -78,6 +78,14 @@
   }
 }
 
+.lyrics-card-full {
+  .hindi-text {
+    font-size: 1.1rem;
+    line-height: 2;
+    white-space: normal;
+  }
+}
+
 .info-section {
   padding: 10px;
 
@@ -106,6 +114,135 @@
       margin-right: 5px;
     }
   }
+
+  .translation-text {
+    background: rgba(255, 153, 51, 0.06);
+    border-left: 3px solid var(--color-saffron);
+    padding: 15px 20px;
+    border-radius: 0 8px 8px 0;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+}
+
+/* =============== National Symbols Grid Section =============== */
+.national-symbols-section {
+  margin-top: 20px;
+}
+
+.section-title {
+  font-size: 2.4rem;
+  font-family: var(--font-heading);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+}
+
+.symbols-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+/* Individual Symbol Visual Card */
+.symbol-visual-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.35s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0, 0, 128, 0.12),
+                0 8px 24px rgba(255, 153, 51, 0.08);
+  }
+}
+
+.symbol-image-wrapper {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to top, rgba(255,255,255,0.7), transparent);
+    pointer-events: none;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .symbol-visual-card:hover & img {
+    transform: scale(1.08);
+  }
+}
+
+.symbol-info {
+  padding: 24px;
+
+  h3 {
+    font-size: 1.35rem;
+    color: var(--color-navy);
+    font-family: var(--font-heading);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    i {
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--color-saffron), var(--color-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .symbol-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-green);
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 153, 51, 0.15);
+
+    em {
+      font-weight: 400;
+      color: #888;
+    }
+  }
+
+  p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin: 0;
+  }
+}
+
+/* =============== Responsive =============== */
+@media (max-width: 1024px) {
+  .symbols-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -120,5 +257,40 @@
   .lyrics-card .hindi-text {
     font-size: 1.1rem;
     white-space: normal;
+  }
+
+  .symbols-card-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .symbol-image-wrapper {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    h1 { font-size: 2rem; }
+  }
+
+  .symbol-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .symbol-info {
+    padding: 18px;
+
+    h3 {
+      font-size: 1.15rem;
+    }
+  }
+
+  .symbol-image-wrapper {
+    height: 180px;
   }
 }
