@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@300;400;600;700&display=swap');
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
 :root {
@@ -10,8 +10,8 @@
 
 
   /* Fonts */
-  --font-primary: 'Outfit', sans-serif;
-  --font-heading: 'Segoe UI', sans-serif;
+  --font-primary: 'Outfit', 'Noto Sans Devanagari', sans-serif;
+  --font-heading: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
 
   /* Glassmorphism */
   --glass-bg: rgba(255, 255, 255, 0.5);
@@ -48,6 +48,12 @@ body::before {
 *::before,
 *::after {
   box-sizing: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
 button,
@@ -93,6 +99,24 @@ button:disabled,
 }
 
 /* Common Classes */
+.text-center {
+  text-align: center;
+}
+
+.page-header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+.page-header h1 {
+  margin-bottom: 10px;
+}
+
+.page-header .subtitle {
+  font-size: 1.1rem;
+  color: #555;
+}
+
 .heading-primary {
   font-family: var(--font-heading);
   color: var(--color-navy);
@@ -103,12 +127,14 @@ button:disabled,
 .main-title.text-gradient {
   background: none !important;
   -webkit-background-clip: unset !important;
+  background-clip: unset !important;
   -webkit-text-fill-color: currentColor !important;
 }
 
 .text-gradient {
   background: linear-gradient(to right, var(--color-saffron), var(--color-green));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

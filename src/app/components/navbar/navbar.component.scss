@@ -97,6 +97,34 @@
     }
   }
 
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 2px solid transparent;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(255, 153, 51, 0.15), rgba(19, 136, 8, 0.15));
+    color: var(--color-navy);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    .lang-flag {
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, var(--color-saffron), var(--color-green));
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+    }
+  }
+
   .menu-toggle {
     display: none;
     font-size: 1.5rem;

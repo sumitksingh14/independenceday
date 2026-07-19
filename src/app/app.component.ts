@@ -1,140 +1,61 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { NgxParticlesModule, NgParticlesService } from '@tsparticles/angular';
-import { Engine } from '@tsparticles/engine';
-import { loadFull } from 'tsparticles';
 import { AudioService } from './core/services/audio.service';
+import { LanguageService } from './core/services/language.service';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, NavbarComponent, FooterComponent, NgxParticlesModule],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
-  id = 'tsparticles';
-  particlesOptions = {
-    background: {
-      color: {
-        value: 'transparent',
-      },
-    },
-    fpsLimit: 60,
-    interactivity: {
-      events: {
-        onClick: {
-          enable: true,
-          mode: 'push',
-        },
-        onHover: {
-          enable: true,
-          mode: 'repulse',
-        },
-        resize: {
-          enable: true,
-        },
-      },
-      modes: {
-        push: {
-          quantity: 4,
-        },
-        repulse: {
-          distance: 100,
-          duration: 0.4,
-        },
-      },
-    },
-    particles: {
-      color: {
-        value: ['#FF9933', '#FFFFFF', '#138808'],
-      },
-      links: {
-        enable: false,
-      },
-      move: {
-        direction: 'bottom' as const,
-        enable: true,
-        outModes: {
-          default: 'out' as const,
-        },
-        random: false,
-        speed: 2,
-        straight: false,
-      },
-      number: {
-        density: {
-          enable: true,
-        },
-        value: 50,
-      },
-      opacity: {
-        value: 0.8,
-      },
-      shape: {
-        type: ['circle', 'star'],
-      },
-      size: {
-        value: { min: 2, max: 5 },
-      },
-    },
-    detectRetina: true,
-  };
-
-  private hasInteracted = false;
+export class AppComponent implements OnInit, OnDestroy {
+  title = 'independence-day-app';
+  t: any = {};
+  private sub: Subscription;
+  private routerSub: Subscription;
 
   constructor(
-    private readonly ngParticlesService: NgParticlesService,
-    public readonly audioService: AudioService
-  ) {}
-
-  ngOnInit(): void {
-    void this.ngParticlesService.init(async (engine: Engine) => {
-      await loadFull(engine);
+    public audioService: AudioService, 
+    public langService: LanguageService,
+    private router: Router
+  ) {
+    this.sub = this.langService.translations$.subscribe(t => this.t = t);
+    
+    // Scroll to top on every route change
+    this.routerSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      // Use setTimeout to ensure the DOM has updated before scrolling
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 0);
     });
   }
 
-  private lastHoveredElement: Element | null = null;
+  ngOnInit(): void {
+    // Attempt to play audio on load (browsers might block this until interaction)
+    setTimeout(() => {
+      // this.audioService.togglePlay(); // Uncomment if you want auto-play, usually bad UX though
+    }, 1000);
+  }
 
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+    this.routerSub.unsubscribe();
+  }
+
+  // Fallback to start audio on first click anywhere if it hasn't started
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    if (!this.hasInteracted) {
-      this.hasInteracted = true;
-      this.audioService.playAudio();
-    }
-    
-    if (this.isInteractive(event.target as HTMLElement)) {
-      this.audioService.playClickSound();
-    }
-  }
-
-  @HostListener('document:mouseover', ['$event'])
-  onDocumentMouseOver(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    const interactiveElement = target.closest('a, button, input, select, textarea, [role="button"], [role="link"], .clickable, .music-toggle, .menu-toggle, .card, .glass-card');
-    
-    if (interactiveElement && interactiveElement !== this.lastHoveredElement) {
-      this.audioService.playHoverSound();
-      this.lastHoveredElement = interactiveElement;
-    } else if (!interactiveElement) {
-      this.lastHoveredElement = null;
-    }
-  }
-
-  private isInteractive(element: HTMLElement | null): boolean {
-    if (!element) return false;
-    return !!element.closest('a, button, input, select, textarea, [role="button"], [role="link"], .clickable, .music-toggle, .menu-toggle, .card, .glass-card');
-  }
-
-  toggleMusic() {
-    this.audioService.toggleAudio();
-  }
-
-  onVolumeChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.audioService.setVolume(parseFloat(input.value));
+  onFirstClick() {
+    this.audioService.playClickSound(); // Just to initialize audio context
   }
 }
